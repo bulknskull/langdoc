@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-// const apiRouter = require('./routes/api');
+const fs = require('fs');
 
 const PORT = 3000;
 
@@ -14,6 +14,23 @@ app.get('/home', (req, res) => {
 
 app.get('/dictionary', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/client/data/dictionary.json'));
-})
+});
 
-// app.use('/api', apiRouter);
+app.post('/dictionary', (req, res) => {
+  // need to add functionality here to actually add data to dictionary
+  const words = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), 'UTF-8'));
+
+  words.push({
+    _id: words.length,
+    english: req.params.english,
+    spanish: req.params.spanish,
+    part_of_speech: '',
+    subcat: '',
+  });
+
+  fs.writeFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), JSON.stringify(words));
+
+  res.send(words);
+
+  // res.sendFile(path.resolve(__dirname + '/client/data/dictionary.json'));
+});
