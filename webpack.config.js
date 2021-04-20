@@ -6,7 +6,7 @@ module.exports = {
     path: path.resolve(__dirname, './public/build'),
     filename: 'bundle.js',
   },
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {
@@ -20,5 +20,10 @@ module.exports = {
         }
       }
     ]
+  },
+  devServer: {
+    publicPath: '/build/',
+    contentBase: './public/',
+    hot: true,
   }
 }

@@ -3,7 +3,7 @@ const React = require('react');
 class App extends React.Component {
   render() {
     return (
-      <h1>This header is coming from React! You chode!</h1>
+      <h1>This header is coming from React! You chode! You absolute chode!</h1>
     )
   }
 }
