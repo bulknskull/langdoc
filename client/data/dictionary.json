@@ -12,5 +12,12 @@
     "spanish": "hoy",
     "part_of_speech": "noun",
     "subcat": "time"
+  },
+  {
+    "_id": 2,
+    "english": "to read",
+    "spanish": "leer",
+    "part_of_speech": "verb",
+    "subcat": "verb"
   }
 ]
