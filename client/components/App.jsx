@@ -3,7 +3,17 @@ const React = require('react');
 class App extends React.Component {
   render() {
     return (
-      <h1>This header is coming from React! You chode! You absolute chode!</h1>
+      <div>
+        <p>Langdoc is a language-learning app that lets you design your own curriculum.</p>
+        <p>Choose an option to get started:</p>
+        <div>
+          <button>View dictionary</button>
+          <button>Add a word</button>
+          <button>Remove a word</button>
+          <button>Update a word</button>
+          <button>Get a flash card</button>
+        </div>
+      </div>
     )
   }
 }

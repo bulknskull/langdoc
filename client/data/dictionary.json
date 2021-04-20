@@ -1,0 +1,16 @@
+[
+  {
+    "_id": 0,
+    "english": "one time",
+    "spanish": "vez",
+    "part_of_speech": "noun",
+    "subcat": "time"
+  },
+  {
+    "_id": 1,
+    "english": "today",
+    "spanish": "hoy",
+    "part_of_speech": "noun",
+    "subcat": "time"
+  }
+]
