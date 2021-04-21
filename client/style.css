@@ -4,6 +4,32 @@ body {
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+#flashCardsContainer {
+  border: 1px solid blue;
+  max-width: 45%;
+  min-width: 30%;
+  border: 3px solid rebeccapurple;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgb(157, 250, 250);
+  display: flex;
+  flex-direction: column;
+}
+
+#flashCardBox {
+  font-size: 24px;
+  font-weight: bolder;
+  width: 80%;
+  padding-top: 23%;
+  padding-bottom: 23%;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  margin: 30px auto;
+  background-color: white;
+  box-shadow: 5px 5px 10px 3px rgb(53, 201, 201);
+}
+
 .normalButton {
   background-color: rebeccapurple;
   color: white;
@@ -11,7 +37,8 @@ body {
   padding: 10px;
   border: 1px solid transparent;
   border-radius: 5px;
-  margin-right: 5px;
+  margin: 0 auto;
+  width: 50%;
 }
 
 #display {
@@ -64,4 +91,9 @@ form {
 #addWordButton {
   width: 50%;
   margin: 0 auto;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: none;
 }

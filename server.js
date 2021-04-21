@@ -18,7 +18,6 @@ app.get('/dictionary', (req, res) => {
 });
 
 app.post('/dictionary', (req, res) => {
-  // need to add functionality here to actually add data to dictionary
   const words = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), 'UTF-8'));
   const lastWord = words[words.length - 1];
   const lastWordId = lastWord['_id'];
@@ -32,6 +31,26 @@ app.post('/dictionary', (req, res) => {
   });
 
   fs.writeFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), JSON.stringify(words));
+
+  res.send(words);
+});
+
+app.delete('/dictionary', (req, res) => {
+  const words = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), 'UTF-8'));
+
+  for (let i = 0; i < words.length; i += 1) {
+    const word = words[i];
+    if (word._id === req.body.id) words.splice(i, 1);
+  }
+
+  fs.writeFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), JSON.stringify(words));
+
+  res.send(words);
+})
+
+app.post('/flashcards', (req, res) => {
+  console.log('POST request received by server');
+  const words = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/client/data/dictionary.json'), 'UTF-8'));
 
   res.send(words);
 });

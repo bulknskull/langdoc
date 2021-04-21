@@ -5,7 +5,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       fetchedWords: false,
-      words: []
+      words: [],
+      flashCard: null,
+      flashCardDisplay: 'Click below to get a flash card!'
     }
   }
 
@@ -16,7 +18,9 @@ class App extends React.Component {
       .then((words) => {
         return this.setState({
           words,
-          fetchedWords: true
+          fetchedWords: true,
+          flashCard: null,
+          flashCardDisplay: 'Click below to get a flash card!'
         });
       })
       .catch(err => console.log(err + 'Error upon mount'))
@@ -43,10 +47,82 @@ class App extends React.Component {
         console.log(response);
         return this.setState({
           words: response,
-          fetchedWords: true
+          fetchedWords: true,
+          flashCard: this.state.flashCard,
+          flashCardDisplay: this.state.flashCardDisplay
         })
       })
       .catch(err => console.log(err));
+  }
+
+  deleteWord(id) {
+    console.log(id);
+    const data = { id };
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+    fetch('/dictionary', requestOptions)
+      .then(res => res.json())
+      .then((response) => {
+        console.log('Data fetched!');
+        console.log(response);
+        return this.setState({
+          words: response,
+          fetchedWords: true,
+          flashCard: this.state.flashCard,
+          flashCardDisplay: this.state.flashCardDisplay
+        })
+      })
+      .catch(err => console.log(err));
+  }
+
+  getFlashCard() {
+    console.log('Clicked to get a new flash card');
+    const dictSize = this.state.words.length;
+    const index = Math.floor(Math.random() * dictSize);
+    const newWord = this.state.words[index];
+
+    if (this.state.flashCard === null || newWord._id !== this.state.flashCard._id) {
+      return this.setState({
+        words: this.state.words,
+        fetchedWords: true,
+        flashCard: newWord,
+        flashCardDisplay: newWord.english
+      })
+    } else {
+      console.log('Oops -- nearly gave you the same word! Let\'s try again...');
+      this.getFlashCard();
+    }    
+  }
+
+  translate() {
+    console.log('Flash card flipped!');
+    if (this.state.flashCardDisplay === 'Click below to get a flash card!') return;
+    for (let word of this.state.words) {
+      console.log(word);
+      if (word._id === this.state.flashCard._id) {
+        console.log('id located!')
+        if (word.english === this.state.flashCardDisplay) {
+          console.log('current display is English: ' + this.state.flashCardDisplay);
+          return this.setState({
+            words: this.state.words,
+            fetchedWords: true,
+            flashCard: word,
+            flashCardDisplay: word.spanish
+          });
+        } else {
+          console.log('current display is not English: ' + this.state.flashCardDisplay);
+          return this.setState({
+            words: this.state.words,
+            fetchedWords: true,
+            flashCard: word,
+            flashCardDisplay: word.english
+          });
+        }
+      }
+    }
   }
 
   render() {
@@ -65,14 +141,13 @@ class App extends React.Component {
       if (a.spanish > b.spanish) return 1;
     })
     .map((word, i) => {
-      console.log(word.spanish);
+      const id = word._id;
       return (
         <div className="entry">
-          <button><img height="30px" width="30px" src="https://i.pinimg.com/474x/67/88/12/67881254d58dfaf7057eaf37d55e910f.jpg" /></button>
+          <button className="deleteButton" id={ id } onClick={() => this.deleteWord(id)}><img height="30px" width="30px" src="https://www.freeiconspng.com/uploads/clear-delete-remove-icon-png-0.png" /></button>
           <span><strong>Spanish:</strong> {word.spanish}</span>
           <span><strong>English:</strong> {word.english}</span>
         </div>
-        
       )
     });
 
@@ -81,10 +156,13 @@ class App extends React.Component {
         <div id='hello'>
           <h1>Welcome to Langdoc!</h1>
           <p>Langdoc is a language-learning app that helps you study better.</p>
-          <p>Choose an option below:</p>
+          <p>Click the <strong>Get new flash card</strong> button below to get started, or keep scrolling to start building your dictionary!</p>
         </div>
-        <div id='buttons'>
-          <button class="normalButton">Flash cards</button>
+        <div id='flashCardsContainer'>
+          <div id='flashCardBox' onClick={() => this.translate()}>
+            { this.state.flashCardDisplay }
+          </div>
+          <button class="normalButton" id="flashCardButton" onClick={() => this.getFlashCard()}>Get new flash card</button>
         </div>
         <div id='addWord'>
           <h3>Add a word to your dictionary:</h3>
