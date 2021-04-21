@@ -4,7 +4,7 @@ body {
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-button {
+.normalButton {
   background-color: rebeccapurple;
   color: white;
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,8 +16,52 @@ button {
 
 #display {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  background-color: rgb(157, 250, 250);
+  border: 3px solid rebeccapurple;
+  border-radius: 5px;
+  padding: 10px;
 }
 
+#dictHeader {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#tip {
+  font-size: 14px;
+}
+
+.entry {
+  display: flex;
+  flex-direction: row;
+  background-color: lightcyan;
+  margin-bottom: 6px;
+}
+
+/* .entry button {
+  border: none;
+} */
+
 span {
-  margin-right: 10px;
+  margin: 5px 10px 5px 5px;
+  width: 50%;
+  padding: 3px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background-color: rgb(157, 250, 250);
+  border: 3px solid rebeccapurple;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#addWordButton {
+  width: 50%;
+  margin: 0 auto;
 }

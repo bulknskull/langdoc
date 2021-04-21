@@ -39,13 +39,14 @@ class App extends React.Component {
     };
     fetch('/dictionary', requestOptions)
       .then(res => res.json())
-      .then((data) => {
-        console.log(data);
+      .then((response) => {
+        console.log(response);
         return this.setState({
-          data,
+          words: response,
           fetchedWords: true
         })
       })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -59,12 +60,19 @@ class App extends React.Component {
 
     // STRETCH GOAL: turn this into a bona fide table
 
-    const wordLines = words.map((word, i) => {
+    const wordLines = words.sort((a, b) => {
+      if (a.spanish < b.spanish) return -1;
+      if (a.spanish > b.spanish) return 1;
+    })
+    .map((word, i) => {
+      console.log(word.spanish);
       return (
         <div className="entry">
+          <button><img height="30px" width="30px" src="https://i.pinimg.com/474x/67/88/12/67881254d58dfaf7057eaf37d55e910f.jpg" /></button>
           <span><strong>Spanish:</strong> {word.spanish}</span>
           <span><strong>English:</strong> {word.english}</span>
         </div>
+        
       )
     });
 
@@ -76,7 +84,7 @@ class App extends React.Component {
           <p>Choose an option below:</p>
         </div>
         <div id='buttons'>
-          <button>Flash cards</button>
+          <button class="normalButton">Flash cards</button>
         </div>
         <div id='addWord'>
           <h3>Add a word to your dictionary:</h3>
@@ -85,7 +93,7 @@ class App extends React.Component {
             <input id="english" name="english" /><br />
             <label for="spanish">Spanish:</label>
             <input id="spanish" name="spanish" /><br />
-            <button id="addWordButton" onClick={(e) => {
+            <button class="normalButton" id="addWordButton" onClick={(e) => {
               e.preventDefault();
               const english = document.querySelector('#english').value;
               const spanish = document.querySelector('#spanish').value;
@@ -98,6 +106,8 @@ class App extends React.Component {
           </form>
         </div>
         <div id='display'>
+          <h3 id='dictHeader'>My Spanish dictionary</h3>
+          <p id='tip'><strong>Tip:</strong> Don't want to study a word anymore? Hit the "X" icon next to any word to delete it from your dictionary!</p>
           { wordLines }
         </div>
       </div>
