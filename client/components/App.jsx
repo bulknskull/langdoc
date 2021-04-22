@@ -7,23 +7,55 @@ class App extends React.Component {
       fetchedWords: false,
       words: [],
       flashCard: null,
-      flashCardDisplay: 'Click below to get a flash card!'
+      flashCardDisplay: 'Click below to get a flash card!',
+      searchedWord: {}
     }
   }
 
   componentDidMount() {
     console.log('mounting...');
+    console.log(this.state.searchedWord);
     fetch('/dictionary')
       .then(res => res.json())
       .then((words) => {
         return this.setState({
           words,
           fetchedWords: true,
-          flashCard: null,
-          flashCardDisplay: 'Click below to get a flash card!'
+          // flashCard: null,
+          // flashCardDisplay: 'Click below to get a flash card!'
         });
       })
       .catch(err => console.log(err + 'Error upon mount'))
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.searchedWord);
+  }
+
+  lookupWord(english, spanish) {
+    console.log({ eng: english, esp: spanish });
+    // empty input boxes show up as empty strings
+    if (english !== '') {
+      for (let word of this.state.words) {
+        if (word.english === english) {
+          return this.setState({
+            searchedWord: word
+          })
+        }
+      }
+    }
+    if (spanish !== '') {
+      for (let word of this.state.words) {
+        if (word.spanish === spanish) {
+          return this.setState({
+            searchedWord: word
+          })
+        }
+      }
+    }
+    return this.setState({
+      searchedWord: { english: 'Sorry!', spanish: 'We couldn\'t find that word.' }
+    })
   }
 
   addWord(english, spanish) {
@@ -47,9 +79,9 @@ class App extends React.Component {
         console.log(response);
         return this.setState({
           words: response,
-          fetchedWords: true,
-          flashCard: this.state.flashCard,
-          flashCardDisplay: this.state.flashCardDisplay
+          // fetchedWords: true,
+          // flashCard: this.state.flashCard,
+          // flashCardDisplay: this.state.flashCardDisplay
         })
       })
       .catch(err => console.log(err));
@@ -70,9 +102,9 @@ class App extends React.Component {
         console.log(response);
         return this.setState({
           words: response,
-          fetchedWords: true,
-          flashCard: this.state.flashCard,
-          flashCardDisplay: this.state.flashCardDisplay
+          // fetchedWords: true,
+          // flashCard: this.state.flashCard,
+          // flashCardDisplay: this.state.flashCardDisplay
         })
       })
       .catch(err => console.log(err));
@@ -86,8 +118,8 @@ class App extends React.Component {
 
     if (this.state.flashCard === null || newWord._id !== this.state.flashCard._id) {
       return this.setState({
-        words: this.state.words,
-        fetchedWords: true,
+        // words: this.state.words,
+        // fetchedWords: true,
         flashCard: newWord,
         flashCardDisplay: newWord.english
       })
@@ -107,16 +139,16 @@ class App extends React.Component {
         if (word.english === this.state.flashCardDisplay) {
           console.log('current display is English: ' + this.state.flashCardDisplay);
           return this.setState({
-            words: this.state.words,
-            fetchedWords: true,
+            // words: this.state.words,
+            // fetchedWords: true,
             flashCard: word,
             flashCardDisplay: word.spanish
           });
         } else {
           console.log('current display is not English: ' + this.state.flashCardDisplay);
           return this.setState({
-            words: this.state.words,
-            fetchedWords: true,
+            // words: this.state.words,
+            // fetchedWords: true,
             flashCard: word,
             flashCardDisplay: word.english
           });
@@ -164,20 +196,44 @@ class App extends React.Component {
           </div>
           <button class="normalButton" id="flashCardButton" onClick={() => this.getFlashCard()}>Get new flash card</button>
         </div>
-        <div id='addWord'>
+        <div class='miniBox' id='lookupWord'>
+          <h3>Look up a specific word in your dictionary:</h3>
+          <form id='lookupForm'>
+            <label for="lookupEnglish">English:</label>
+            <input id="lookupEnglish" name="lookupEnglish" /><br />
+            <label for="lookupSpanish">Spanish:</label>
+            <input id="lookupSpanish" name="lookupSpanish" /><br />
+            <button class="normalButton" id="lookupButton" onClick={(e) => {
+              e.preventDefault();
+              const english = document.querySelector('#lookupEnglish').value;
+              const spanish = document.querySelector('#lookupSpanish').value;
+              console.log(english, spanish);
+              this.lookupWord(english, spanish);
+              document.getElementById('lookupForm').reset();
+            }}>
+              Look up word
+            </button>
+            <div id='lookupResults'>
+              <p id='resultsTitle'>Search results</p>
+              <p><strong>English: </strong>{ this.state.searchedWord.english }</p>
+              <p><strong>Spanish: </strong>{ this.state.searchedWord.spanish }</p>
+            </div>
+          </form>
+        </div>
+        <div class='miniBox' id='addWord'>
           <h3>Add a word to your dictionary:</h3>
-          <form>
-            <label for="english">English:</label>
-            <input id="english" name="english" /><br />
-            <label for="spanish">Spanish:</label>
-            <input id="spanish" name="spanish" /><br />
+          <form id='addForm'>
+            <label for="addEnglish">English:</label>
+            <input id="addEnglish" name="addEnglish" /><br />
+            <label for="addSpanish">Spanish:</label>
+            <input id="addSpanish" name="addSpanish" /><br />
             <button class="normalButton" id="addWordButton" onClick={(e) => {
               e.preventDefault();
-              const english = document.querySelector('#english').value;
-              const spanish = document.querySelector('#spanish').value;
+              const english = document.querySelector('#addEnglish').value;
+              const spanish = document.querySelector('#addSpanish').value;
               console.log(english, spanish);
               this.addWord(english, spanish);
-              document.querySelector('form').reset();
+              document.getElementById('addForm').reset();
             }}>
               Add word
             </button>
